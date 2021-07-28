@@ -1,4 +1,5 @@
 # Tokyo2020-Pictogram-using-MediaPipe
+MediaPipeで姿勢推定を行い、Tokyo2020オリンピック風のピクトグラムを表示するデモです。<br>
 https://user-images.githubusercontent.com/37477845/127340964-5378706f-034a-4920-be23-c6fbca442686.mp4
 
 # Requirement 
