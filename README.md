@@ -1,1 +1,1 @@
-# tokyo2020-pictogram-using-mediapipe
+# Tokyo2020-Pictogram-using-MediaPipe
