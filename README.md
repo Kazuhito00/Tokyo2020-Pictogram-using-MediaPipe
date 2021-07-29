@@ -39,6 +39,34 @@ python main.py
 背景色とピクトグラムの色を反転する<br>
 デフォルト：指定なし
 
+## Using Docker
+
+Ubuntuの場合はホストマシンにMediaPipeをインストールせず、Docker + docker-composeを使うこともできます。
+
+まず環境に合わせて`docker-compose.yml`を編集します。  
+ビデオデバイスを指定する際`video0`を使う場合は以下のように編集します。
+
+```diff
+    # Edit here
+    devices:
+      # - "/dev/video0:/dev/video0"
+      # - "/dev/video1:/dev/video0"
+-     - "/dev/video2:/dev/video0"
++     - "/dev/video0:/dev/video0"
+```
+
+次にDockerイメージをビルドします。
+
+```
+docker-compose build
+```
+
+最後にDockerコンテナを起動します。
+
+```
+docker-compose up
+```
+
 # Author
 高橋かずひと(https://twitter.com/KzhtTkhs)
  
