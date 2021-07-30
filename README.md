@@ -61,6 +61,12 @@ Ubuntuの場合はホストマシンにMediaPipeをインストールせず、Do
 docker-compose build
 ```
 
+GUIアプリケーションの起動（X11 Forwarding）を許可します。
+
+```
+xhost +local:root
+```
+
 最後にDockerコンテナを起動します。
 
 ```
