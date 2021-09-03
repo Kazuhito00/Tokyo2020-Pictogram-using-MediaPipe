@@ -73,6 +73,10 @@ xhost +local:root
 docker-compose up
 ```
 
+# Other Info
+ネットメディアへの掲載情報や素晴らしい派生プロダクトの紹介は以下投稿を参照ください。<br>
+[オリンピック風ピクトグラム：ネットメディア掲載 & OSS的な広がり](https://kazuhito00.hatenablog.com/entry/2021/08/03/234320)
+
 # Author
 高橋かずひと(https://twitter.com/KzhtTkhs)
  
