@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import copy
 import math
 import argparse
@@ -79,12 +80,13 @@ def main():
         color = (100, 33, 3)
         bg_color = (255, 255, 255)
 
-    while True:
+    while(cap.isOpened()):
         display_fps = cvFpsCalc.get()
 
         # カメラキャプチャ #####################################################
         ret, image = cap.read()
         if not ret:
+            print("End of video")
             break
         image = cv.flip(image, 1)  # ミラー表示
         debug_image01 = copy.deepcopy(image)
@@ -167,13 +169,13 @@ def draw_stick_figure(
     face_x = int(face_x)
     face_y = int(face_y)
     face_radius = int(face_radius * 1.5)
-
     stick_radius01 = int(face_radius * (4 / 5))
     stick_radius02 = int(stick_radius01 * (3 / 4))
     stick_radius03 = int(stick_radius02 * (3 / 4))
 
     # 描画対象リスト
     draw_list = [
+        # 0,   # 顔
         11,  # 右腕
         12,  # 左腕
         23,  # 右脚
@@ -185,13 +187,10 @@ def draw_stick_figure(
                  bg_color,
                  thickness=-1)
 
-    # 顔 描画
-    cv.circle(image, (face_x, face_y), face_radius, color, -1)
-
     # 腕/脚 描画
+    draw_face = False
     for landmark_info in sorted_landmark_point:
         index = landmark_info[0]
-
         if index in draw_list:
             point01 = [p for p in landmark_point if p[0] == index][0]
             point02 = [p for p in landmark_point if p[0] == (index + 2)][0]
@@ -217,9 +216,29 @@ def draw_stick_figure(
                     color=color,
                     bg_color=bg_color,
                 )
-
+            if index in [11, 12] and not draw_face:
+                draw_body(image, landmark_point, bg_color)
+                # 顔 描画
+                cv.circle(image, (face_x, face_y), face_radius, color, -1)
+                draw_face = True
     return image
 
+def draw_body(image, landmark_point, bg_color):
+    point0 = [p for p in landmark_point if p[0] == 0][0]
+    point01 = [p for p in landmark_point if p[0] == 11][0]
+    point02 = [p for p in landmark_point if p[0] == 12][0]
+    zDistance = math.sqrt((point01[3] - point02[3])**2)
+    # Side Angle is not obvious, do not draw
+    if zDistance < 0.2 or zDistance > 0.7:
+        return
+    (x0, y0) = point0[2]
+    (x1, y1) = point01[2]
+    (x2, y2) = point02[2]
+    center = (int((x1 + x2)/2), int((y1 + y2)/2))
+    radius = int((math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)) / 2)
+    radius = max(0, radius)
+    cv.ellipse(image, center, (int(radius * 1.2), radius), 90, 0, 360, bg_color, -1)
+    # cv.line(image, point01[2], point02[2], (0, 250 ,0))
 
 def min_enclosing_face_circle(landmark_point):
     landmark_array = np.empty((0, 2), int)
